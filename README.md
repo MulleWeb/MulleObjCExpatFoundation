@@ -13,25 +13,19 @@ It uses the expat library.
 
 
 
+
+
+
+
 ## Documentation & Guides
 
 * [API Summary](asset/dox/api/toc)
 
 
-
-
-## Requirements
-
-|   Requirement         | Release Version  | Description
-|-----------------------|------------------|---------------
-| [expat](https://github.com/libexpat/libexpat) | ![Mulle kybernetiK tag](https://img.shields.io/github/tag/libexpat/libexpat.svg) [![Build Status](https://github.com/libexpat/libexpat/workflows/CI/badge.svg?branch=release)](https://github.com/libexpat/libexpat/actions/workflows/mulle-sde-ci.yml) | 
-| [MulleFoundationBase](https://github.com/MulleFoundation/MulleFoundationBase) | ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleFoundation/MulleFoundationBase.svg) [![Build Status](https://github.com/MulleFoundation/MulleFoundationBase/workflows/CI/badge.svg?branch=release)](https://github.com/MulleFoundation/MulleFoundationBase/actions/workflows/mulle-sde-ci.yml) | 🧱 MulleFoundationBase amalgamates Foundations projects
-| [MulleBase64](https://github.com/MulleWeb/MulleBase64) | ![Mulle kybernetiK tag](https://img.shields.io/github/tag/MulleWeb/MulleBase64.svg) [![Build Status](https://github.com/MulleWeb/MulleBase64/workflows/CI/badge.svg?branch=release)](https://github.com/MulleWeb/MulleBase64/actions/workflows/mulle-sde-ci.yml) | 💬 Decode and encode NSData with base64
-| [mulle-objc-list](https://github.com/mulle-objc/mulle-objc-list) | ![Mulle kybernetiK tag](https://img.shields.io/github/tag/mulle-objc/mulle-objc-list.svg) [![Build Status](https://github.com/mulle-objc/mulle-objc-list/workflows/CI/badge.svg?branch=release)](https://github.com/mulle-objc/mulle-objc-list/actions/workflows/mulle-sde-ci.yml) | 📒 Lists mulle-objc runtime information contained in executables.
-
 ### You are here
 
 ![Overview](overview.dot.svg)
+
 
 ## Add
 
@@ -43,14 +37,16 @@ mulle-sde add github:MulleFoundation/MulleObjCExpatFoundation
 
 ## Install
 
+### Install with mulle-sde
+
 Use [mulle-sde](//github.com/mulle-sde) to build and install MulleObjCExpatFoundation and all dependencies:
 
 ``` sh
 mulle-sde install --prefix /usr/local \
-   https://github.com/MulleFoundation/MulleObjCExpatFoundation/archive/latest.tar.gz
+   https://github.com//MulleObjCExpatFoundation/archive/latest.tar.gz
 ```
 
-### Legacy Installation
+### Manual Installation
 
 Install the requirements:
 
@@ -71,13 +67,18 @@ cmake -B build                               \
       -DMULLE_SDK_PATH="${PREFIX_DIR}"       \
       -DCMAKE_INSTALL_PREFIX="${PREFIX_DIR}" \
       -DCMAKE_PREFIX_PATH="${PREFIX_DIR}"    \
-      -DCMAKE_BUILD_TYPE=Release &&
+       -DCMAKE_BUILD_TYPE=Release &&
 cmake --build build --config Release &&
 cmake --install build --config Release
 ```
 
+### Platforms and Compilers
+
+All platforms and compilers supported by
+[mulle-c11](//github.com/mulle-c/mulle-c11).
+
+
 ## Author
 
 [Nat!](https://mulle-kybernetik.com/weblog) for Mulle kybernetiK  
-
 
