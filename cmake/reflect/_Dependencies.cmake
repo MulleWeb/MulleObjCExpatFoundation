@@ -5,7 +5,7 @@
 #
 # Disable generation of this file with:
 #
-# mulle-sde environment set MULLE_SOURCETREE_TO_CMAKE_DEPENDENCIES_FILE DISABLE
+# mulle-sde environment --global set MULLE_SOURCETREE_TO_CMAKE_DEPENDENCIES_FILE DISABLE
 #
 if( MULLE_TRACE_INCLUDE)
    message( STATUS "# Include \"${CMAKE_CURRENT_LIST_FILE}\"" )
@@ -56,7 +56,7 @@ else()
             expatd
             NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_FIND_ROOT_PATH
          )
-         if( NOT EXPAT_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBARIES)
+         if( NOT EXPAT_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBRARIES)
             find_library( EXPAT_LIBRARY NAMES
                ${MULLE_PREFERRED_LIBRARY_PREFIX}expat${CMAKE_DEBUG_POSTFIX}${MULLE_PREFERRED_LIBRARY_SUFFIX}
                ${MULLE_PREFERRED_LIBRARY_PREFIX}expat${MULLE_PREFERRED_LIBRARY_SUFFIX}
@@ -140,118 +140,7 @@ endif()
 
 
 #
-# Generated from sourcetree: ED53C083-7952-4D16-B4C9-497D857C33A0;MulleFoundationBase;no-singlephase;
-# Disable with : `mulle-sourcetree mark MulleFoundationBase no-link`
-# Disable for this platform: `mulle-sourcetree mark MulleFoundationBase no-cmake-platform-${MULLE_UNAME}`
-# Disable for a sdk: `mulle-sourcetree mark MulleFoundationBase no-cmake-sdk-<name>`
-#
-if( COLLECT_ALL_LOAD_DEPENDENCY_LIBRARIES_AS_NAMES)
-   list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES "MulleFoundationBase")
-else()
-   if( NOT MULLE_FOUNDATION_BASE_LIBRARY)
-      foreach( _TMP_MULLE_FOUNDATION_BASE_LIBRARY_TARGET MulleFoundationBase)
-         if( TARGET ${_TMP_MULLE_FOUNDATION_BASE_LIBRARY_TARGET})
-            set( MULLE_FOUNDATION_BASE_LIBRARY ${_TMP_MULLE_FOUNDATION_BASE_LIBRARY_TARGET})
-            break()
-         endif()
-      endforeach()
-      if( NOT MULLE_FOUNDATION_BASE_LIBRARY)
-         find_library( MULLE_FOUNDATION_BASE_LIBRARY NAMES
-            ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleFoundationBase${CMAKE_DEBUG_POSTFIX}${MULLE_PREFERRED_LIBRARY_SUFFIX}
-            ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleFoundationBase${MULLE_PREFERRED_LIBRARY_SUFFIX}
-            ${MULLE_FALLBACK_LIBRARY_PREFIX}MulleFoundationBase${CMAKE_DEBUG_POSTFIX}${MULLE_FALLBACK_LIBRARY_SUFFIX}
-            ${MULLE_FALLBACK_LIBRARY_PREFIX}MulleFoundationBase${MULLE_FALLBACK_LIBRARY_SUFFIX}
-            MulleFoundationBase
-            NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_FIND_ROOT_PATH
-         )
-         if( NOT MULLE_FOUNDATION_BASE_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBARIES)
-            find_library( MULLE_FOUNDATION_BASE_LIBRARY NAMES
-               ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleFoundationBase${CMAKE_DEBUG_POSTFIX}${MULLE_PREFERRED_LIBRARY_SUFFIX}
-               ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleFoundationBase${MULLE_PREFERRED_LIBRARY_SUFFIX}
-               ${MULLE_FALLBACK_LIBRARY_PREFIX}MulleFoundationBase${CMAKE_DEBUG_POSTFIX}${MULLE_FALLBACK_LIBRARY_SUFFIX}
-               ${MULLE_FALLBACK_LIBRARY_PREFIX}MulleFoundationBase${MULLE_FALLBACK_LIBRARY_SUFFIX}
-               MulleFoundationBase
-            )
-         endif()
-      endif()
-      message( STATUS "MULLE_FOUNDATION_BASE_LIBRARY is ${MULLE_FOUNDATION_BASE_LIBRARY}")
-   endif()
-   if( MULLE_FOUNDATION_BASE_LIBRARY)
-         #
-         # Add MULLE_FOUNDATION_BASE_LIBRARY to ALL_LOAD_DEPENDENCY_LIBRARIES list.
-         # Disable with: `mulle-sourcetree mark MulleFoundationBase no-cmake-add`
-         #
-         if( NOT ${MULLE_FOUNDATION_BASE_LIBRARY} IN_LIST ALL_LOAD_DEPENDENCY_LIBRARIES)
-            list( APPEND ALL_LOAD_DEPENDENCY_LIBRARIES ${MULLE_FOUNDATION_BASE_LIBRARY})
-         endif()
-         #
-         # Inherit information from dependency.
-         # Encompasses: no-cmake-searchpath,no-cmake-dependency,no-cmake-loader
-         # Disable with: `mulle-sourcetree mark MulleFoundationBase no-cmake-inherit`
-         #
-         # temporarily expand CMAKE_MODULE_PATH
-         get_filename_component( _TMP_MULLE_FOUNDATION_BASE_ROOT "${MULLE_FOUNDATION_BASE_LIBRARY}" DIRECTORY)
-         get_filename_component( _TMP_MULLE_FOUNDATION_BASE_ROOT "${_TMP_MULLE_FOUNDATION_BASE_ROOT}" DIRECTORY)
-         #
-         #
-         # Search for "Definitions.cmake" and "DependenciesAndLibraries.cmake" to include.
-         # Disable with: `mulle-sourcetree mark MulleFoundationBase no-cmake-dependency`
-         #
-         foreach( _TMP_MULLE_FOUNDATION_BASE_NAME "MulleFoundationBase")
-            set( _TMP_MULLE_FOUNDATION_BASE_DIR "${_TMP_MULLE_FOUNDATION_BASE_ROOT}/include/${_TMP_MULLE_FOUNDATION_BASE_NAME}/cmake")
-            # use explicit path to avoid "surprises"
-            if( IS_DIRECTORY "${_TMP_MULLE_FOUNDATION_BASE_DIR}")
-               list( INSERT CMAKE_MODULE_PATH 0 "${_TMP_MULLE_FOUNDATION_BASE_DIR}")
-               # we only want top level INHERIT_OBJC_DEPS, so disable them
-               if( NOT NO_INHERIT_OBJC_DEPS)
-                  set( NO_INHERIT_OBJC_DEPS OFF)
-               endif()
-               list( APPEND _TMP_INHERIT_OBJC_DEPS ${NO_INHERIT_OBJC_DEPS})
-               set( NO_INHERIT_OBJC_DEPS ON)
-               #
-               include( "${_TMP_MULLE_FOUNDATION_BASE_DIR}/DependenciesAndLibraries.cmake" OPTIONAL)
-               #
-               list( GET _TMP_INHERIT_OBJC_DEPS -1 NO_INHERIT_OBJC_DEPS)
-               list( REMOVE_AT _TMP_INHERIT_OBJC_DEPS -1)
-               list( REMOVE_ITEM CMAKE_MODULE_PATH "${_TMP_MULLE_FOUNDATION_BASE_DIR}")
-               #
-               unset( MULLE_FOUNDATION_BASE_DEFINITIONS)
-               unset( MULLE_FOUNDATION_BASE_RENDEZVOUS_GLOBALS)
-               include( "${_TMP_MULLE_FOUNDATION_BASE_DIR}/Definitions.cmake" OPTIONAL)
-               list( APPEND INHERITED_DEFINITIONS ${MULLE_FOUNDATION_BASE_DEFINITIONS})
-               include( "${_TMP_MULLE_FOUNDATION_BASE_DIR}/Definitions.cmake" OPTIONAL)
-               list( APPEND RENDEZVOUS_GLOBALS ${MULLE_FOUNDATION_BASE_RENDEZVOUS_GLOBALS})
-               break()
-            else()
-               message( STATUS "${_TMP_MULLE_FOUNDATION_BASE_DIR} not found")
-            endif()
-         endforeach()
-         #
-         # Search for "MulleObjCDeps+<name>.h" in include directory.
-         # Disable with: `mulle-sourcetree mark MulleFoundationBase no-cmake-loader`
-         #
-         if( NOT NO_INHERIT_OBJC_DEPS)
-            foreach( _TMP_MULLE_FOUNDATION_BASE_NAME "MulleFoundationBase")
-               set( _TMP_MULLE_FOUNDATION_BASE_FILE "${_TMP_MULLE_FOUNDATION_BASE_ROOT}/include/${_TMP_MULLE_FOUNDATION_BASE_NAME}/MulleObjCDeps+${_TMP_MULLE_FOUNDATION_BASE_NAME}.h")
-               if( EXISTS "${_TMP_MULLE_FOUNDATION_BASE_FILE}")
-                  list( APPEND INHERITED_OBJC_DEPS ${_TMP_MULLE_FOUNDATION_BASE_FILE})
-                  break()
-               endif()
-            endforeach()
-         endif()
-   else()
-      # Disable with: `mulle-sourcetree mark MulleFoundationBase no-require-link`
-      message( SEND_ERROR "MULLE_FOUNDATION_BASE_LIBRARY was not found in ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleFoundationBase${CMAKE_DEBUG_POSTFIX}${MULLE_PREFERRED_LIBRARY_SUFFIX}
-${MULLE_PREFERRED_LIBRARY_PREFIX}MulleFoundationBase${MULLE_PREFERRED_LIBRARY_SUFFIX}
-${MULLE_FALLBACK_LIBRARY_PREFIX}MulleFoundationBase${CMAKE_DEBUG_POSTFIX}${MULLE_FALLBACK_LIBRARY_SUFFIX}
-${MULLE_FALLBACK_LIBRARY_PREFIX}MulleFoundationBase${MULLE_FALLBACK_LIBRARY_SUFFIX}
-MulleFoundationBase")
-   endif()
-endif()
-
-
-#
-# Generated from sourcetree: 06CB6048-6DD4-42CF-ADA6-0A73CABDDD39;MulleBase64;no-singlephase;
+# Generated from sourcetree: 32F79939-BF9B-421B-BC0F-9AD0683C71D2;MulleBase64;no-singlephase;
 # Disable with : `mulle-sourcetree mark MulleBase64 no-link`
 # Disable for this platform: `mulle-sourcetree mark MulleBase64 no-cmake-platform-${MULLE_UNAME}`
 # Disable for a sdk: `mulle-sourcetree mark MulleBase64 no-cmake-sdk-<name>`
@@ -275,7 +164,7 @@ else()
             MulleBase64
             NO_CMAKE_SYSTEM_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_FIND_ROOT_PATH
          )
-         if( NOT MULLE_BASE64_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBARIES)
+         if( NOT MULLE_BASE64_LIBRARY AND NOT DEPENDENCY_IGNORE_SYSTEM_LIBRARIES)
             find_library( MULLE_BASE64_LIBRARY NAMES
                ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleBase64${CMAKE_DEBUG_POSTFIX}${MULLE_PREFERRED_LIBRARY_SUFFIX}
                ${MULLE_PREFERRED_LIBRARY_PREFIX}MulleBase64${MULLE_PREFERRED_LIBRARY_SUFFIX}

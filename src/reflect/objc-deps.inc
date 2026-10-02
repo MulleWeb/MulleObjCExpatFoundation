@@ -1,6 +1,6 @@
       { @selector( MulleObjCDeps), @selector( MulleBase64) },      // 3c20656f;MulleObjCDeps;22440994;MulleBase64
-      { @selector( MulleObjCDeps), @selector( MulleFoundationBase) },      // 3c20656f;MulleObjCDeps;efab19ea;MulleFoundationBase
       { @selector( MulleObjCExpatParser), MULLE_OBJC_NO_CATEGORYID },      // e0ad20dd;MulleObjCExpatParser;;
+      { @selector( MulleObjCXMLParser), MULLE_OBJC_NO_CATEGORYID },      // 5bc22b69;MulleObjCXMLParser;;
       { @selector( NSArray), @selector( MulleObjCPropertyListPrinting_XML) },      // 233490fe;NSArray;9ae794e9;MulleObjCPropertyListPrinting_XML
       { @selector( NSData), @selector( MulleObjCPropertyListPrinting_XML) },      // 8fce7861;NSData;9ae794e9;MulleObjCPropertyListPrinting_XML
       { @selector( NSDate), @selector( MulleObjCPropertyListPrinting_XML) },      // cfcedd21;NSDate;9ae794e9;MulleObjCPropertyListPrinting_XML
@@ -11,5 +11,3 @@
       { @selector( NSPropertyListSerialization), @selector( MulleObjCExpatParser) },      // 87901b51;NSPropertyListSerialization;e0ad20dd;MulleObjCExpatParser
       { @selector( NSString), @selector( MulleObjCPropertyListPrinting_XML) },      // 1994a171;NSString;9ae794e9;MulleObjCPropertyListPrinting_XML
       { @selector( _MulleObjCBoolNumber), @selector( MulleObjCPropertyListPrinting_XML) },      // 263c5445;_MulleObjCBoolNumber;9ae794e9;MulleObjCPropertyListPrinting_XML
-      { @selector( _MulleObjCDoubleNumber), @selector( MulleObjCPropertyListPrinting_XML) },      // ae25b758;_MulleObjCDoubleNumber;9ae794e9;MulleObjCPropertyListPrinting_XML
-      { @selector( _MulleObjCLongDoubleNumber), @selector( MulleObjCPropertyListPrinting_XML) },      // 4ec38072;_MulleObjCLongDoubleNumber;9ae794e9;MulleObjCPropertyListPrinting_XML

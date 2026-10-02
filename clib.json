@@ -1,6 +1,6 @@
 {
    "name" : "MulleObjCExpatFoundation",
-   "version" : "0.20.11",
+   "version" : "0.21.0",
    "description" : "👴🏼 XML parser based on MulleObjCStandardFoundation and libexpat",
    "keywords" : [],
    "license" : "BSD-3-Clause",
@@ -20,6 +20,8 @@
       "src/MulleObjCExpatParser.m",
       "src/MulleObjCPropertyListPrinting+XML.h",
       "src/MulleObjCPropertyListPrinting+XML.m",
+      "src/MulleObjCXMLParser.h",
+      "src/MulleObjCXMLParser.m",
       "src/NSPropertyListSerialization+Expat.m",
       "src/reflect/objc-deps.inc",
       "src/reflect/_MulleObjCExpatFoundation-export.h",
@@ -32,8 +34,7 @@
    ],
    "dependencies" : {
       "libexpat/libexpat": "*",
-      "MulleFoundation/MulleFoundationBase": "*",
       "MulleWeb/MulleBase64": "*",
-      "mulle-objc/mulle-objc-list": "*"
+      "mulle-objc/mulle-objc-tools": "*"
    }
 }

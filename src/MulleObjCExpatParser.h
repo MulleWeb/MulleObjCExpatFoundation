@@ -35,6 +35,7 @@
 #import "import.h"
 
 // other files in this library
+#import "MulleObjCXMLParser.h"
 
 // other libraries of MulleObjCStandardFoundation
 
@@ -42,13 +43,18 @@
 
 
 // TODO: rename to MulleObjCExpatPlistParser
-@interface MulleObjCExpatParser : NSObject
+//
+// Reads an XML property list. The XML reading itself is done by the generic
+// MulleObjCXMLParser; this class is just a delegate that builds the plist.
+//
+@interface MulleObjCExpatParser : NSObject <MulleObjCXMLParserDelegate>
 {
    // these are all ephemeral currently
 @private
    struct mulle_pointerpairarray   _stack;          // useful for XML
    id                              _textStorage;    // useful for XML
    id                              _dateFormatter;  // ephemeral usage in XML
+   id                              _error;          // set by the delegate on failure
 }
 @end
 

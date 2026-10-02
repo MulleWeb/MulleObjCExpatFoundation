@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.13...99.99)
 
-project( MulleObjCExpatFoundation VERSION 0.20.11 LANGUAGES C)
+project( MulleObjCExpatFoundation VERSION 0.21.0 LANGUAGES C)
 
 
 
@@ -48,8 +48,8 @@ endif()
 include( InstallLibrary)
 
 if( LINK_PHASE)
-   include( InstallCMakeInclude)
-   include( InstallCMakePackage)
+   include( AddSubdirectorySupport)
+   include( FindPackageSupport)
 endif() 
 
 include( FinalOutput OPTIONAL)

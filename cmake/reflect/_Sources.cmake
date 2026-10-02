@@ -14,6 +14,7 @@ set( SOURCES
 src/MulleObjCExpatFoundation.m
 src/MulleObjCExpatParser.m
 src/MulleObjCPropertyListPrinting+XML.m
+src/MulleObjCXMLParser.m
 src/NSPropertyListSerialization+Expat.m
 )
 

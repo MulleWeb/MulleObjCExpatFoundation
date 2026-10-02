@@ -280,6 +280,23 @@ char   *MulleXMLEscapeUTF8Character( char c, char buf[ 6])
 
 - (void) mullePrintXML:(struct MulleObjCPrintPlistContext *) ctxt
 {
+   char   *type;
+
+   type = [self objCType];
+   switch( *type)
+   {
+   case _C_FLT :
+   case _C_DBL :
+#ifdef _C_LNG_DBL
+   case _C_LNG_DBL :
+#endif
+      MulleObjCPrintPlistContextWriteUTF8Indentation( ctxt);
+      MulleObjCPrintPlistContextWriteUTF8String( ctxt, "<real>");
+      [self mullePrintPlist:ctxt];
+      MulleObjCPrintPlistContextWriteUTF8String( ctxt, "</real>\n");
+      return;
+   }
+
    MulleObjCPrintPlistContextWriteUTF8Indentation( ctxt);
    MulleObjCPrintPlistContextWriteUTF8String( ctxt, "<integer>");
    [self mullePrintPlist:ctxt];
@@ -298,32 +315,6 @@ char   *MulleXMLEscapeUTF8Character( char c, char buf[ 6])
       MulleObjCPrintPlistContextWriteUTF8String( ctxt, "<true/>\n");
    else
       MulleObjCPrintPlistContextWriteUTF8String( ctxt, "<false/>\n");
-}
-
-@end
-
-
-@implementation _MulleObjCDoubleNumber( MulleObjCPropertyListPrinting_XML)
-
-- (void) mullePrintXML:(struct MulleObjCPrintPlistContext *) ctxt
-{
-   MulleObjCPrintPlistContextWriteUTF8Indentation( ctxt);
-   MulleObjCPrintPlistContextWriteUTF8String( ctxt, "<real>");
-   [self mullePrintPlist:ctxt];
-   MulleObjCPrintPlistContextWriteUTF8String( ctxt, "</real>\n");
-}
-
-@end
-
-
-@implementation _MulleObjCLongDoubleNumber( MulleObjCPropertyListPrinting_XML)
-
-- (void) mullePrintXML:(struct MulleObjCPrintPlistContext *) ctxt
-{
-   MulleObjCPrintPlistContextWriteUTF8Indentation( ctxt);
-   MulleObjCPrintPlistContextWriteUTF8String( ctxt, "<real>");
-   [self mullePrintPlist:ctxt];
-   MulleObjCPrintPlistContextWriteUTF8String( ctxt, "</real>\n");
 }
 
 @end

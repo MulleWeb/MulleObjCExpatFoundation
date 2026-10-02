@@ -34,6 +34,7 @@
 //
 #import "MulleObjCExpatParser.h"
 
+#import "MulleObjCXMLParser.h"
 #import "import-private.h"
 
 // other files in this library
@@ -42,12 +43,11 @@
 
 // std-c and dependencies
 #include <ctype.h>
+#include <string.h>
 
 #ifndef DEBUG
-# define XML_DEBUG     0
 # define STACK_DEBUG   0
 #else
-# define XML_DEBUG     0
 # define STACK_DEBUG   0
 #endif
 
@@ -98,6 +98,7 @@ static void   pushKeyObj( MulleObjCExpatParser *self,
 #endif
 }
 
+
 #if 0 // UNUSED
 static NSString  *peekKey( MulleObjCExpatParser *self)
 {
@@ -107,6 +108,7 @@ static NSString  *peekKey( MulleObjCExpatParser *self)
    return( pair.value);
 }
 #endif
+
 
 static void   *popKeyObj( MulleObjCExpatParser *self, id *value)
 {
@@ -206,52 +208,6 @@ static NSString  *_keyForUTF8String( char *string)
 }
 
 
-//
-// expat call backs, we iz lucky, coz the actual text is only in the leafs
-//
-static void   start_elem_handler( void *_self, XML_Char *name, XML_Char **attributes)
-{
-   MulleObjCExpatParser   *self;
-   NSString                                  *key;
-
-#if XML_DEBUG
-   mulle_fprintf( stderr, "<%s>\n", name);
-#endif
-   self = (MulleObjCExpatParser *) _self;
-
-   key = _keyForUTF8String( name);
-   pushKeyObj( self, key, nil);
-
-   [self->_textStorage setString:nil]; // jettison trash
-}
-
-
-static void    char_data_handler( void *_self, XML_Char *s, int len)
-{
-   MulleObjCExpatParser   *self;
-   NSString                                  *text;
-
-   self = (MulleObjCExpatParser *) _self;
-
-   assert( self->_textStorage);
-
-   if( len == 1 && *s == '\n')
-   {
-      [self->_textStorage appendString:@"\n"];
-      return;
-   }
-
-#if XML_DEBUG
-   mulle_fprintf( stderr, "%.*s\n", len, s);
-#endif
-   text = [[NSString alloc] mulleInitWithUTF8Characters:(void *) s
-                                                 length:len];
-
-   [self->_textStorage appendString:text];
-   [text release];
-}
-
-
 - (NSDateFormatter *) _XMLDateFormatter
 {
    // ephemeral, only valid during one run
@@ -262,21 +218,43 @@ static void    char_data_handler( void *_self, XML_Char *s, int len)
 }
 
 
-static void    end_elem_handler( void *_self, const XML_Char *name)
+//
+// MulleObjCXMLParserDelegate. expat call backs, we iz lucky, coz the actual
+// text is only in the leafs
+//
+- (void) parser:(MulleObjCXMLParser *) parser
+  didStartElement:(NSString *) elementName
+     attributes:(NSDictionary *) attributes
 {
-   MulleObjCExpatParser   *self;
-   NSString               *key;
-   NSString               *match;
-   NSString               *text;
-   id                     obj;
-   id                     child;
-   NSData                 *data;
+   NSString   *key;
 
-#if XML_DEBUG
-   mulle_fprintf( stderr, "</%s>\n", name);
-#endif
-   self = (MulleObjCExpatParser *) _self;
-   key  = _keyForUTF8String( (char *) name);
+   key = _keyForUTF8String( (char *) [elementName UTF8String]);
+   pushKeyObj( self, key, nil);
+
+   [self->_textStorage setString:nil]; // jettison trash
+}
+
+
+- (void) parser:(MulleObjCXMLParser *) parser
+  foundCharacters:(NSString *) string
+{
+   assert( self->_textStorage);
+
+   [self->_textStorage appendString:string];
+}
+
+
+- (void) parser:(MulleObjCXMLParser *) parser
+    didEndElement:(NSString *) elementName
+{
+   NSString   *key;
+   NSString   *match;
+   NSString   *text;
+   id          obj;
+   id          child;
+   NSData     *data;
+
+   key  = _keyForUTF8String( (char *) [elementName UTF8String]);
    text = [self->_textStorage copy];
    [self->_textStorage setString:nil];
 
@@ -403,7 +381,7 @@ static void    end_elem_handler( void *_self, const XML_Char *name)
    while( 0);
 
    if( ! obj)
-      MulleObjCThrowInvalidArgumentException( @"Plist unparsable at <%s %@>", name, text);
+      MulleObjCThrowInvalidArgumentException( @"Plist unparsable at <%@ %@>", elementName, text);
 
    // if obj != text, it can be discarded
    if( obj != text)
@@ -412,103 +390,21 @@ static void    end_elem_handler( void *_self, const XML_Char *name)
 }
 
 
-// buf size must be column + 1 + 3 + 1
-static void   paint_arrow( char *buf, int column)
+- (void) parser:(MulleObjCXMLParser *) parser
+  parseErrorOccurred:(NSString *) error
 {
-   int   i;
-
-   if( column < 3)
-   {
-      for( i = 0; i < column; i++)
-         *buf++ = ' ';
-      *buf++ = '^';
-      for( i = 0; i < 3; i++)
-         *buf++ = '_';
-   }
-   else
-   {
-      for( i = 0; i < column; i++)
-         *buf++ = '_';
-      *buf++ = '^';
-   }
-   *buf++ = 0;
-}
-
-
-static NSString *
-   xml_error_description( XML_Parser parser, char *xml_s, size_t xml_len)
-{
-   char                  *s;
-   char                  c_buf[ 6];
-   enum XML_Error        code;
-   int                   maxlength;
-   NSString              *description;
-   struct mulle_buffer   buffer;
-   XML_Index             index;
-   XML_LChar             *error;
-   XML_Size              column;
-   XML_Size              line;
-   struct mulle_data     data;
-
-   line   = XML_GetCurrentLineNumber( parser);
-   column = XML_GetCurrentColumnNumber( parser);
-   index  = XML_GetCurrentByteIndex( parser);
-   code   = XML_GetErrorCode( parser);
-   error  = (XML_LChar *) XML_ErrorString( code);
-
-   // output entire line
-   s = "???";
-   sprintf( c_buf, "???");
-   if( index > 0 && index < (long) xml_len)
-   {
-      s = &xml_s[ index];
-      if( isprint( *s))
-         sprintf( c_buf, "%.1s", s);
-      else
-         sprintf( c_buf, "\\0x%x", *s & 0xFF);
-      while( s > xml_s && *s != '\n' && s[ -1] != '\n')
-         --s;
-   }
-   maxlength = (int) (&xml_s[ xml_len] - s);
-   if( maxlength > 256)
-      maxlength = 256;
-
-   mulle_buffer_init( &buffer, 256, &mulle_default_allocator);
-   mulle_buffer_sprintf( &buffer, "XML line %ld, at '%s': %s", line, c_buf, error);
-   mulle_buffer_sprintf( &buffer, "%.*s", maxlength, s);
-
-   // output marker if line is not too large
-   if( column <= 256 - 3)
-   {
-      char   buf[ column + 5];
-
-      paint_arrow( buf, (int) column);
-      mulle_buffer_sprintf( &buffer, "%.*s", maxlength, buf);
-   }
-
-   mulle_buffer_add_byte( &buffer, 0);
-   data = mulle_buffer_extract_data( &buffer);
-   mulle_buffer_done( &buffer);
-
-   description = [[[NSString alloc] mulleInitWithUTF8CharactersNoCopy:data.bytes
-                                                               length:data.length
-                                                            allocator:&mulle_default_allocator] autorelease];
-   return( description);
+   [_error autorelease];
+   _error = [error retain];
 }
 
 
 - (id) parseXMLData:(NSData *) data
 {
-   char                     *xml_s;
-   id                       plist;
-   int                      inv_rval;
-   NSAutoreleasePool        *pool;
-   NSException              *exception;
-   NSString                 *key;
-   NSString                 *reason;
-   size_t                   xml_len;
-   struct mulle_allocator   *allocator;
-   XML_Parser               parser;
+   MulleObjCXMLParser        *xmlParser;
+   id                         plist;
+   NSAutoreleasePool         *pool;
+   NSException               *exception;
+   struct mulle_allocator    *allocator;
 
    NSParameterAssert( [data length]); // should have been checked already
 
@@ -516,57 +412,41 @@ static NSString *
    {
       NSCParameterAssert( ! self->_textStorage);
 
-      parser    = XML_ParserCreate( NULL);
       allocator = MulleObjCInstanceGetAllocator( self);
 
       _mulle_pointerpairarray_init( &self->_stack, 128, allocator);
       _textStorage = [NSMutableString string];
+      _dateFormatter = nil;
+      _error       = nil;
       exception    = nil;
       plist        = nil;
 
+      xmlParser = [[MulleObjCXMLParser alloc] initWithDelegate:self];
+
    NS_DURING
-      XML_SetUserData( parser, self);
-      XML_SetStartElementHandler( parser, (void *) start_elem_handler);
-      XML_SetEndElementHandler( parser, end_elem_handler);
-      XML_SetCharacterDataHandler( parser, (void *) char_data_handler);
+      if( ! [xmlParser parseData:data])
+         MulleObjCThrowInvalidArgumentException( @"%@", _error ? _error : @"XML parse failed");
 
-      xml_s   = [data bytes];
-      xml_len = [data length];
-
-      for(;;)
+      NSCParameterAssert( mulle_pointerpairarray_get_count( &self->_stack) == 1);
       {
-         if( ! xml_len)
-            MulleObjCThrowInvalidArgumentException( @"no XML text");
-         if( xml_s[ xml_len - 1])
-            break;
+         NSString   *key;
 
-         // remove trailing zeroes
-         --xml_len;
-      }
-
-      inv_rval = XML_Parse( parser, xml_s, (int) xml_len, YES);
-      if( inv_rval)
-      {
-         NSCParameterAssert( mulle_pointerpairarray_get_count( &self->_stack) == 1);
          key = popKeyObj( self, &plist);
          NSParameterAssert( key == _PlistKey);
          MULLE_C_UNUSED( key);
-      }
-      else
-      {
-         reason = xml_error_description( parser, xml_s, xml_len);
-         MulleObjCThrowInvalidArgumentException( reason);
       }
 
    NS_HANDLER
       exception = localException;
    NS_ENDHANDLER
-      XML_ParserFree( parser);
+      [xmlParser release];
 
       emptyObjects( self);
 
       _mulle_pointerpairarray_done( &self->_stack);
       _textStorage = 0;
+      [_error autorelease];
+      _error = nil;
       [exception raise];
    }
    [pool release];
@@ -574,40 +454,4 @@ static NSString *
    return( [plist autorelease]);
 }
 
-
-#if 0
-
-- (NSString *) mulleDebugContentsDescription      MULLE_OBJC_THREADSAFE_METHOD
-{
-   struct mulle_pointerpairarrayenumerator   pair_rover;
-   NSString                                  *separator;
-   NSMutableString                           *s;
-   struct mulle_pointerpair                  pair;
-
-   s = [NSMutableString string];
-   [s appendString:@"<"];
-
-   separator  = @" ";
-   pair_rover = mulle_pointerpairarray_enumerate( &self->_stack);
-   for(;;)
-   {
-      pair = mulle_pointerpairarrayenumerator_next( &pair_rover);
-      if( ! pair.value)
-         break;
-
-      [s appendFormat:@"%@{ %@ = %@ }", separator, pair.key, pair.value];
-      separator = @", ";
-   }
-   mulle_pointerpairarrayenumerator_done( &pair_rover);
-
-   [s appendString:@">"];
-
-   return( s);
-}
-
-#endif
-
 @end
-
-
-
