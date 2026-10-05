@@ -1,4 +1,22 @@
 #
+# MulleBase64 nodetype: ${MULLE_BASE64_NODETYPE:-tar}
+#
+export MULLE_BASE64_NODETYPE="git"
+
+
+#
+# MulleBase64 url: ${MULLE_BASE64_URL:-https://github.com/MulleWeb/MulleBase64/archive/${MULLE_TAG}.tar.gz}
+#
+export MULLE_BASE64_URL="https://github.com/MulleWeb/MulleBase64.git"
+
+
+#
+# MulleBase64 branch: ${MULLE_BASE64_BRANCH}
+#
+export MULLE_BASE64_BRANCH="prerelease"
+
+
+#
 # MulleFoundationBase nodetype: ${MULLE_FOUNDATION_BASE_NODETYPE:-tar}
 #
 export MULLE_FOUNDATION_BASE_NODETYPE="git"
@@ -230,23 +248,5 @@ export MULLE__OBJC__TOOLS_URL="https://github.com/mulle-objc/mulle-objc-tools.gi
 # mulle-objc-tools branch: ${MULLE__OBJC__TOOLS_BRANCH}
 #
 export MULLE__OBJC__TOOLS_BRANCH="prerelease"
-
-
-#
-# MulleBase64 nodetype: ${MULLE_BASE64_NODETYPE:-tar}
-#
-export MULLE_BASE64_NODETYPE="git"
-
-
-#
-# MulleBase64 url: ${MULLE_BASE64_URL:-https://github.com/MulleWeb/MulleBase64/archive/${MULLE_TAG}.tar.gz}
-#
-export MULLE_BASE64_URL="https://github.com/MulleWeb/MulleBase64.git"
-
-
-#
-# MulleBase64 branch: ${MULLE_BASE64_BRANCH}
-#
-export MULLE_BASE64_BRANCH="prerelease"
 
 
