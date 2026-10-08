@@ -1,6 +1,7 @@
 ## 0.21.0
 
 
+
 * added MulleObjCXMLParser, a SAX-style incremental XML parser for feeds, HTML and arbitrary XML
 * documented the optional MulleObjCXMLParserDelegate protocol callbacks for elements, character data and parse errors
 * documented MulleObjCExpatParser conformance to MulleObjCXMLParserDelegate and its `_error` ivar
