@@ -4,7 +4,7 @@
    "description" : "👴🏼 XML parser based on MulleObjCStandardFoundation and libexpat",
    "keywords" : [],
    "license" : "BSD-3-Clause",
-   "repo" : "MulleFoundation/MulleObjCExpatFoundation",
+   "repo" : "MulleWeb/MulleObjCExpatFoundation",
    "src" : [
       "asset/dox/api/toc/index.md",
       "src/generic/import-private.h",
